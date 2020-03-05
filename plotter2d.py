@@ -1,28 +1,10 @@
-################################################################
-# 2D плоттер
-# Скрипт использует библиотеки numpy и matplotlib
-# для построения двумерных графиков заданных функций
-#
-# Разработчик: студентка 2-ого курса МГТУ СТАНКИН Белова Е. Ю.
-# Данная версия скрипта может использоваться для построения простейших графиков функций:
-# y = x^n
-# y = x^n + x^(n-1) + ... + x^1 + x^0
-# y = n^x
-# y = log x
-# y = sin x (y = cos x)
-# y = arcsin x (y = arccos x)
-# y = tg x
-# y = arctg x (y = arcctg x)
-# y = sec x (y = cosec x)
-################################################################
-
 import numpy as np
 import fourFn as fn
 from fourFn import BNF
 import matplotlib.pyplot as plt
 
-
-class Queue:   # Класс очереди
+# Queue to draw with of function's XY coordinates + Color
+class Queue:
     def __init__(self):
         self.x_values = []
         self.y_values = []
@@ -44,7 +26,7 @@ class Queue:   # Класс очереди
         self.y_values.clear()
         self.colors.clear()
 
-
+# Function data representation
 class Function:
     def __init__(self, text, start, end, accuracy, color):
         self.text = text
@@ -53,17 +35,17 @@ class Function:
         self.accuracy = accuracy
         self.color = color
 
-
-def calculate_x_values(start=0, end=10, accuracy=0):    # Функция, которая создает разбиение по Ох
-    # Принимает начало и конец отрезка
+# Calculates X values for function
+# With the specific borders and accuracy
+def calculate_x_values(start=0, end=10, accuracy=0):
     if accuracy <= 0:
         accuracy = (end - start) * 10
 
     x_values = np.linspace(start, end, accuracy)
     return x_values
 
-
-def calculate_y_values(x_values, expression):   # Формирование значений оси у по функции
+# Calculates Y values for function based on X values
+def calculate_y_values(x_values, expression):
     expression = expression.replace('X', 'x')
     y_values = []
 
@@ -83,8 +65,8 @@ def calculate_y_values(x_values, expression):   # Формирование зн�
 
     return y_values
 
-
-def create_figure_canvas(start=0, end=10):  # Тоже функция создания полотна
+# Creates canvas with axes
+def create_figure_canvas(start=0, end=10):
     plt.cla()
     figure_canvas = plt.figure()
     axes = figure_canvas.add_subplot(111)
@@ -95,15 +77,15 @@ def create_figure_canvas(start=0, end=10):  # Тоже функция созда
     axes.set_ylabel('Функция')
     return figure_canvas, axes
 
-
-def draw(function_queue, axes):   # Еще одна функция отрисовки графика (с использованием списка линий)
+# Draws all functions from queue
+def draw(function_queue, axes):
     for i in range(0, len(function_queue.y_values)):
         try:
             axes.plot(function_queue.x_values[i], function_queue.y_values[i], color=str(function_queue.colors[i]))
         except Exception as e:
             print('There is incorrect functions in list ', e)
 
-
+# Adds function to draw queue
 def add_function(expression, function_queue, x_values, color):
     try:
         y_values = calculate_y_values(x_values, expression)
@@ -112,7 +94,7 @@ def add_function(expression, function_queue, x_values, color):
     else:
         function_queue.add(x_values, y_values, color)
 
-
+# Edits function in queue by index
 def edit_function(index, expression, function_queue, x_values, color):
     try:
         y_values = calculate_y_values(x_values, expression)
@@ -123,14 +105,14 @@ def edit_function(index, expression, function_queue, x_values, color):
         function_queue.y_values[index] = y_values
         function_queue.colors[index] = color
 
-
-def clear_all(function_queue, axes):   # Очистка всех функций
+# Clears drawing queue
+def clear_all(function_queue, axes):
     length = len(axes.lines)
     for i in range(length):
         axes.lines[0].remove()
     function_queue.clear()
 
-
+# Validates text as math expression
 def validate_text(text):
     try:
         BNF().parseString(text.replace('x', str(0)), parseAll=True)
@@ -144,6 +126,6 @@ def validate_text(text):
         return False
     return True
 
-
-def screenshot(figure_canvas):   # Сохранение фигуры
+# Creates screenshot (just cuz' why not?)
+def screenshot(figure_canvas):
     figure_canvas.savefig('example.png')
