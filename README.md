@@ -1,5 +1,5 @@
 # Description
-My project for University, I did it in a couple days and may be will be developed in a future  
+My project for University, I made it in a couple days and may be will develope in a future  
 ![Screenshot](/Screenshot.png)
 
 # Stack
