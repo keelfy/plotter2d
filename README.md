@@ -1,6 +1,6 @@
 # Description
 My project for University, I did it in a couple days and may be will be developed in a future  
-![Screenshot](/Screenshot.jpg)
+![Screenshot](/Screenshot.png)
 
 # Stack
 - pyqt 5 (user interface)
